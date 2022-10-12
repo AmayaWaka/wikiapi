@@ -27,15 +27,13 @@ const Article = mongoose.model("article", articlesSchema);
 //   }
 // });
 app.use(express.static("public"));
-
+//Targeting all articles
 app.route('/articles')
 .get(function(req, res){
 
   Article.find(function(err, foundArticles){
     res.send(foundArticles);
-
   });
-
 })
 .post(function(req, res){
     const newBlog = new Article({
@@ -50,21 +48,41 @@ app.route('/articles')
         res.send(err);
       }
     });
-
+})
+.put(function(){
 
 })
-.put(function(){});
-app.delete("/articles",function(req, res){
+.delete(function(req, res){
   Article.deleteMany(function(err){
     if(!err){
-      console.log("Items deleted");
+      res.send("Successfuly deleted all articles");
     }else{
-      console.log("Unable to delete");
+      res.send(err);
+    }
+  });
+});
+//Targeting specific articles
+//Getting a specific article
+app.route('/articles/:articleTitle')
+.get(function(req, res){
+  Articles.findOne({title: req.params.articleTitle}, function(err,foundItem){
+    if(!err){
+      res.send(foundItem);
+    }else{
+      res.send(err);
     }
   });
 
-});
+})
+.post(function(req, res){
 
+})
+.put(function(req, res){
+
+})
+.delete(function(req, res){
+
+});
 
 app.listen(3000, function(){
   console.log("Server started");
