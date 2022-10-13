@@ -79,6 +79,20 @@ app.route('/articles/:articleTitle')
   });
 
 })
+//Updating a specific field in a specific document
+.patch(function(req, res){
+  Article.update({title: req.params.articleTitle},
+    {$set: req.body},
+    function(err){
+      if(!err){
+        res.send("Successfuly updated article");
+      }else{
+        console.log(err);
+      }
+    }
+  );
+
+})
 .delete(function(req, res){
 
 });
