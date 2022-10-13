@@ -15,17 +15,7 @@ const articlesSchema = {
 
 const Article = mongoose.model("article", articlesSchema);
 
-// const newArticle = new Article ({
-//   title: "John",
-//   content: "About john"
-// });
-// newArticle.save(function(err){
-//   if(!err){
-//     console.log("Article inserted successfuly");
-//   }else{
-//     console.log(err);
-//   }
-// });
+
 app.use(express.static("public"));
 //Targeting all articles
 app.route('/articles')
@@ -65,19 +55,28 @@ app.route('/articles')
 //Getting a specific article
 app.route('/articles/:articleTitle')
 .get(function(req, res){
-  Articles.findOne({title: req.params.articleTitle}, function(err,foundItem){
-    if(!err){
-      res.send(foundItem);
+  Article.findOne({title: req.params.articleTitle}, function(err,foundArticle){
+    if(foundArticle){
+      res.send(foundArticle);
     }else{
-      res.send(err);
+      res.send("Could not get specific article");
     }
   });
-
 })
-.post(function(req, res){
-
-})
+//Updating a specific route
 .put(function(req, res){
+  Article.replaceOne(
+    {title: req.params.articleTitle},
+    {title: req.body.title, content: req.body.content},
+    {overwrite: true},
+    function(err){
+    if(!err){
+      res.send("Updated successfuly");
+    }else{
+      console.log(err);
+    }
+
+  });
 
 })
 .delete(function(req, res){
